@@ -28,9 +28,9 @@ Do not infer truth from filenames, folder names, comments, old tests, README tex
 11. Reasoning checks. Before finalizing a non-trivial conclusion, identify the load-bearing claim, the evidence for it, and what would disprove it; hunt for alternative explanations and selection bias. If the honest result is "partly proven" or "unclear", say so. The full procedure is in the `reasoning-discipline` skill.
 12. Prompt and skill quality. Instructions in prompts, skills, and agent specs must change observable behavior; use `agent-system-design` for the full no-op filter.
 13. Linear (mandatory) — source of truth for planned work. Two modes, never mixed: (A) Plan & Create, (B) Continue & Execute. Know which before touching Linear; use it both to create and to read tickets back.
-11.1 Triggers: Plan&Create = "build/create/plan these," "scope this," "add to Linear." Continue&Execute = "continue development," "pick up work," "what's next." Ambiguous → ask one line: "Plan new tickets, or continue existing work?"
-11.2 Project Resolution (both modes): one project per interaction, name MUST match the repo. Search all projects for a matching name — found → use it (all tasks/subtasks live under it); not found → tell me, ask before creating (never silently create). Confirm resolved name in one line before creating/reading.
-11.3 Plan & Create (approval-gated). Hard gate: create nothing until I approve.
+13.1 Triggers: Plan&Create = "build/create/plan these," "scope this," "add to Linear." Continue&Execute = "continue development," "pick up work," "what's next." Ambiguous → ask one line: "Plan new tickets, or continue existing work?"
+13.2 Project Resolution (both modes): one project per interaction, name MUST match the repo. Search all projects for a matching name — found → use it (all tasks/subtasks live under it); not found → tell me, ask before creating (never silently create). Confirm resolved name in one line before creating/reading.
+13.3 Plan & Create (approval-gated). Hard gate: create nothing until I approve.
 • Think/research first, as long as needed: study domain, full surface of each feature, libs/tooling (exact versions, setup steps, pitfalls). Write tickets only once the whole feature can be described; a partial ticket is defective.
 • Check Linear "Resources" docs for context.
 1. Request → features; each feature = one parent.
@@ -40,26 +40,26 @@ Do not infer truth from filenames, folder names, comments, old tests, README tex
 5. Only after approval, create tickets under the resolved project.
 • Dependencies on creation: native blocking/"blocked by" relations; if unavailable, state order in description; mark foundational tasks do-first.
 • Ticket content — feature-first, not code-first: detail what/why/behavior/outcome/acceptance/edge cases/constraints; never how-to-code or snippets; reader understands the feature without line-level direction; enumerate full scope explicitly + quantify ("all components, every variant," not "components"); state DoD + acceptance + complexity bounds in the ticket; capture setup/tooling prereqs (packages, exact steps, versions, gotchas).
-11.4 Continue & Execute:
+13.4 Continue & Execute:
 1. Resolve project, read tickets from Linear.
 2. Find immediately actionable (unblocked, next in order).
 3. Parent tasks first (they're the features).
 4. Within a parent, finish its subtasks.
 5. Respect dependency order; foundational before dependents.
 6. Move ticket states as work progresses; Done only after end-to-end verification vs DoD, never on "written"/"compiles."
-• Parent-by-parent (default): complete one parent fully (all subtasks, feature whole per §13) before touching another; then state the next actionable parent in one line and pause for my confirmation; never silently roll into the next.
+• Parent-by-parent (default): complete one parent fully (all subtasks, feature whole per §0 and §15.1) before touching another; then state the next actionable parent in one line and pause for my confirmation; never silently roll into the next.
 • Override (continuous, no pause) when I say "complete all parents" or name specific parents: work straight through, still respecting dependency order. Even then, stop and surface any parent that's blocked/ambiguous/has an undone dependency.
-11.5 Always: use Linear both directions; one project per repo named after the repo; subtasks always under parents; dependencies always explicit; tickets always feature-first; Done gated by §13.1 (verify end-to-end before any Done).
+13.5 Always: use Linear both directions; one project per repo named after the repo; subtasks always under parents; dependencies always explicit; tickets always feature-first; Done gated by §15.1 (verify end-to-end before any Done).
 14. Context Compaction & Re-Grounding (mandatory) — the compacted summary is lossy, a hint, never source of truth. After compaction:
 • Don't use the summary to decide progress/completion/next steps.
-• Re-ground from real sources (§2 again from scratch): re-read actual Linear tickets per §25 (don't infer state from summary); re-inspect actual code (files, structure, what's changed); re-confirm config/env/ports from source; re-read the DoD.
+• Re-ground from real sources (§2 again from scratch): re-read actual Linear tickets per §13.4 (don't infer state from summary); re-inspect actual code (files, structure, what's changed); re-confirm config/env/ports from source; re-read the DoD.
 • Reconcile real ticket+code state vs the summary; real wins on conflict.
-• Only then resume — continue the in-flight parent/subtask or pick the next per §25.4 (incl. parent gate).
+• Only then resume — continue the in-flight parent/subtask or pick the next per §13.4 (incl. parent gate).
 • Never mark Done / assume complete / skip a step from the summary alone — verify in code/Linear.
 15. Feature Completeness & DoD (mandatory) — the unit of work is the feature, not the ticket; optimize for "works end-to-end in the product," never "ticket checked off."
     15.1 DONE only when ALL hold: end-to-end (BE+FE+integration actually consuming each other, not stubbed); all states handled (loading/empty/error/success/partial/unauthorized/edge); full declared scope delivered (no subset/sample/"few to demonstrate"); verified for real (real BE requests/responses, real FE interaction, no "should work"); meets every cross-cutting bar (security, memory, non-blocking, file size, error handling, a11y, tokenized UI); complexity analyzed; contracts/types/docs updated where touched.
     15.2 Time/space complexity (first-class): know + state complexity of core paths; no accidental O(n²)+ on hot paths, no unbounded in-memory data, no N+1; if naive is chosen now, say so + note the better one.
-    15.3 No early "done": not Done until §13.1 holds ("written"/"compiles"/"one path works"/"a few examples" ≠ done); if it can't be finished (blocked/ambiguous/scope bigger than understood), stop and surface — never ship a stub and advance the ticket; DoD travels with the work (in every ticket or a pinned Resources doc; re-read after compaction).
+    15.3 No early "done": not Done until §15.1 holds ("written"/"compiles"/"one path works"/"a few examples" ≠ done); if it can't be finished (blocked/ambiguous/scope bigger than understood), stop and surface — never ship a stub and advance the ticket; DoD travels with the work (in every ticket or a pinned Resources doc; re-read after compaction).
 16. Complexity and resource hygiene. For non-trivial hot paths or data-heavy work, consider time/space complexity, blocking behavior, retries, and memory growth. Avoid accidental quadratic work, unbounded in-memory accumulation, hidden busy loops, and uncontrolled fan-out; if a naive approach is chosen deliberately, name the cost and validation path.
 
 ## Skill Routing

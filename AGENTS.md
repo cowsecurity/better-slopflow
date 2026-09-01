@@ -7,6 +7,7 @@ Do not infer truth from filenames, folder names, comments, old tests, README tex
 0. Non-Negotiables
    • Start every response with: "Moo Moo, on it!"
    • No hardcoded results in logic (esp. BE/API). Real computation/data/env/config; mocks only when asked.
+   • NEVER add claude/codex/or any other model or harness provider as "Co Author" in commits, PR descriptions.
    • Don't run dev servers; assume they're already running.
    • Security-first, memory/resource hygiene, non-blocking — every change.
    • File size: 500 lines hard cap, <300 soft, React components <200.
